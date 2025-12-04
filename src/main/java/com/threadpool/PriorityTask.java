@@ -11,6 +11,7 @@ public class PriorityTask implements Comparable<PriorityTask>, Runnable {
 
     @Override
     public int compareTo(PriorityTask other) {
+        // Higher priority first
         return Integer.compare(other.priority, this.priority);
     }
 
