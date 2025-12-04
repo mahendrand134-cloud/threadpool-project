@@ -1,22 +1,27 @@
 package com.threadpool;
 
+import java.util.concurrent.CompletableFuture;
+
 public class MainTestProgram {
+
     public static void main(String[] args) {
-        ThreadPoolExecutorCore pool = new ThreadPoolExecutorCore(4, 20);
 
-        for (int i = 0; i < 30; i++) {
-            int finalI = i;
+        ThreadPoolExecutorCore pool =
+                new ThreadPoolExecutorCore(2, 6, 30, 1000);
 
-            boolean accepted = pool.submit(
-                new PriorityTask(i % 5, () ->
-                    System.out.println("Executing Task " + finalI +
-                        " on " + Thread.currentThread().getName())
-                )
-            );
+        for (int i = 0; i < 20; i++) {
 
-            if (!accepted) {
-                System.out.println("Task " + i + " rejected due to backpressure!");
-            }
+            final int x = i;
+
+            CompletableFuture<Integer> result =
+                    pool.submit(() -> {
+                        System.out.println("Running task " + x +
+                                " on " + Thread.currentThread().getName());
+                        return x * 10;
+                    }, i % 5);
+
+            result.thenAccept(v ->
+                    System.out.println("Completed: " + v));
         }
 
         try { Thread.sleep(2000); } catch (Exception ignored) {}
