@@ -5,13 +5,16 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Wraps a Callable<T> into a PriorityTask and exposes a CompletableFuture<T>.
+ *
+ * NOTE: PriorityTask requires a (priority, Runnable) constructor; we pass
+ * a no-op Runnable and override run() here to run the callable and complete the future.
  */
 public class FutureTaskWrapper<T> extends PriorityTask {
     private final Callable<T> callable;
     private final CompletableFuture<T> future;
 
     public FutureTaskWrapper(int priority, Callable<T> callable) {
-        super(priority);
+        super(priority, () -> {}); // safe placeholder for PriorityTask.task
         this.callable = callable;
         this.future = new CompletableFuture<>();
     }
