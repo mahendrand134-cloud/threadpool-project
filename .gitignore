@@ -6,14 +6,14 @@ target/
 *.ear
 *.iml
 
-# IntelliJ / VSCode
+# Eclipse / IntelliJ / VS Code
+.project
+.classpath
+.settings/
 .idea/
 .vscode/
 *.log
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
-
-# Maven local
-.settings/
